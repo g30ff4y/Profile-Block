@@ -1,0 +1,128 @@
+#set ($pageStructure = $_XPathTool.selectSingleNode($contentRoot, "/system-data-structure"))
+##setup prfile group
+#set ($profile_groups = $_XPathTool.selectNodes($pageStructure, "profile_group"))
+
+##setup pagesetup
+#set ($pageSetup = $_XPathTool.selectNodes($pageStructure, "pageSetup"))
+
+##set block id
+#set ($blockID = "")
+#set ($blockID = $_XPathTool.selectSingleNode($pageSetup, "profile-block-id").text)
+
+<div id="$blockID" class="remainder-box normal_page component">
+
+##profile group loop
+#foreach ($profile_group in $profile_groups)
+
+##set heading level selector
+    #set ($heading_level = "")
+    #set ($heading_level = $_XPathTool.selectSingleNode($pageSetup, "heading_level").value)
+    #set ($heading_level = $_MathTool.toInteger($heading_level))
+
+    <div class="profile-group">
+
+##setup group heading
+    #set ($groupHeading = "")
+    #set ($groupHeading = $profile_group.getChild("group_heading").text)
+    #if ($groupHeading != "")
+        <div class="block-heading">
+            <h$heading_level>$groupHeading</h$heading_level>
+            #set ($heading_level = $heading_level+1)
+        </div>    
+    #end    
+##setup individual profiles 
+        #set ($profiles = $_XPathTool.selectNodes($profile_group, "profile"))
+##start profile loop for individual profiles        
+        #foreach($profile in $profiles)
+            
+            #set ($bio = "")
+            #set ($email = "")
+            #set ($line_check = "")
+            #set ($image = "")
+            #set ($first_name = "")
+            #set ($last_name = "")
+            #set ($title_dept = "")
+            #set ($link = "")
+            #set ($extLink = "")
+            #set ($lines = "")
+                
+            #set ($first_name = $_SerializerTool.serialize($profile.getChild("first_name"), true))
+            #set ($last_name = $_SerializerTool.serialize($profile.getChild("last_name"), true))
+            #set ($title_dept = $_SerializerTool.serialize($profile.getChild("title_dept"), true))
+            #set ($email = $profile.getChild("email").text) 
+            #set ($bio = $_SerializerTool.serialize($profile.getChild("bio_text"), true))
+
+            #set ($link = $profile.getChild("link").getChild("path").text)
+            #set ($extLink = $profile.getChild("extLink").text)
+
+            #set ($lines = $_XPathTool.selectNodes($profile, 'line[. !=""]'))
+            
+            #set ($line_size = $lines.size()) 
+
+            #set ($image = $_SerializerTool.serialize($profile.getChild("profile_photo").getChild("path"), true))
+##render profile data            
+            <div class="row-fluid profile">
+##name, department and link logic           
+                #if ($title_dept != "" && $link == "/" && $extLink == "")
+                    <h$heading_level>$first_name $last_name - $title_dept</h$heading_level>
+                #elseif ($title_dept != "" && $link != "/" && $extLink == "")
+                    <a href="$link"><h$heading_level>$first_name $last_name - $title_dept</h$heading_level></a>
+                #elseif ($title_dept != "" && $link == "/" && $extLink != "")
+                    <a href="$extLink" target="_blank"><h$heading_level>$first_name $last_name - $title_dept</h$heading_level></a>
+                #elseif ($title_dept == "" && $link != "/" && $extLink == "")    
+                    <a href="$link"><h$heading_level>$first_name $last_name</h$heading_level></a>
+                #elseif ($title_dept == "" && $link == "/" && $extLink != "")    
+                    <a href="$extLink" target="_blank"><h$heading_level>$first_name $last_name</h$heading_level></a>
+                #else
+                    <h$heading_level>$first_name $last_name</h$heading_level>
+                #end
+                <div class="row-fluid profile-details">
+                #if ($image != "/")
+                    <div class="col-xs-12 col-sm-4 profile_photo">
+                        <img src="[system-asset]${image}[/system-asset]"/>
+                    </div>
+                #end 
+                    <div class="profile_info">
+                        #if ($email != "")
+                            <div class="col-xs-12 col-sm-8 profile-email">
+                                <p><b>Email:</b>&#160;<a href="mailto:$email" target="_blank">$email</a></p>
+                            </div>
+                        #end 
+                            #if ($line_size > 0)
+                                #set ($left_col = "")
+                                #set ($right_col = "")
+                                #foreach ($line in $lines)
+                                    #set ($content = "<p>" + $_SerializerTool.serialize($line, true) + "</p>")
+                                    #if ($_MathTool.mod($foreach.count, 2) == 1)
+                                        #set ($left_col = $left_col + $content)
+                                    #else
+                                        #set ($right_col = $right_col + $content)
+                                    #end    
+                                #end
+                                #if ($image == "/")
+                                    <div class="col-xs-12 profile-lines">
+                                #elseif ($image != "/")    
+                                    <div class="col-xs-12 col-sm-8 profile-lines">
+                                #end    
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-6">$left_col</div>
+                                            <div class="col-xs-12 col-sm-6">$right_col</div>
+                                        </div>
+                                    </div>
+                            #end    
+                            
+                        #if ($bio != "<bio_text />")    
+                            <div class="profile_bio">
+                                $bio
+                            </div>
+                        #end
+                    </div>
+                </div> ##profile-details     
+                <div class="profile_hr">
+                    <hr/>
+                </div>
+            </div> ##profile
+        #end ##profile
+    </div> ##profile group
+#end ##profile group
+</div>
