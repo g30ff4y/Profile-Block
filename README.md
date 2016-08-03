@@ -6,7 +6,7 @@ Updated 5/27/16 @g30ff4y
 [TOC]
 
 ##Overview
-The Profiles Block allows for display of people that are not in the Employee Database, like undergraduate students and community volunteers. The Profiles block lists all people on a single page and can get lengthy. If you need to display many people not in the Employee Database in a slightly more condensed format like accordions, check to see if the project would work with the [Roster System](Roster).
+The Profiles Block allows for display of people that are not in the Employee Database, like undergraduate students and community volunteers. The Profiles block lists all people on a single page and can get lengthy. If you need to display many people not in the Employee Database in a slightly more condensed format like accordions, check to see if the project would work with the Roster System.
 ###Examples
 * [IRSE](http://www.umt.edu/grad/irse/people/default.php)
 * [Writing at Work Conference Panelists](http://hs.umt.edu/creativewriting/writing-at-work/participants.php)
