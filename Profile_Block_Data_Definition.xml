@@ -1,0 +1,26 @@
+<system-data-structure>
+    <group identifier="profile_group" label="Profile Group" multiple="true">
+        <text identifier="group_heading" label="Group Heading"/>
+        <group identifier="profile" label="Profile" multiple="true">
+            <text identifier="title_dept" label="Title and/or Department"/>
+            <text identifier="first_name" label="First Name"/>
+            <text identifier="last_name" label="Last Name"/>
+            <asset type="page" identifier="link" label="Link to internal page" help-text="Use this to wrap name as link to internal page"/>
+            <text identifier="extLink" label="-or- External Link" help-text="Use this to wrap name as link to external page"/>
+            <text identifier="email" label="Email"/>
+            <text identifier="line" label="Line" multiple="true" maximum-number="6"/>
+            <asset type="file" identifier="profile_photo" label="Photo"/>
+            <text wysiwyg="true" identifier="bio_text" label="Biography"/>
+        </group>
+    </group>
+    <group identifier="pageSetup" label="Block Setup" collapsed="true">
+        <text identifier="profile-block-id" label="Custom Block ID"/>
+        <text type="dropdown" identifier="heading_level" label="Initial Heading Level" default="2">
+            <dropdown-item value="2"/>
+            <dropdown-item value="3"/>
+            <dropdown-item value="4"/>
+            <dropdown-item value="5"/>
+            <dropdown-item value="6"/>
+        </text>
+    </group>
+</system-data-structure>
